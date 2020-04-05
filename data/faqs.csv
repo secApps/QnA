@@ -1,4 +1,4 @@
-qbody,abody
+title,paragraphs
 what are static blocks and static initalizers in Java ?,"Static blocks or static initializers are used to initalize static fields in java. we declare static blocks when we
 want to intialize static fields in our class. Static blocks gets executed exactly once when the class is loaded
 . Static blocks are executed even before the constructors are executed."

@@ -2,6 +2,7 @@ import csv
 import os
 import re
 import html as ihtml
+import re
 
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -23,6 +24,8 @@ def clean_text(text):
     text = BeautifulSoup(ihtml.unescape(text), "lxml").text
     text = re.sub(r"http[s]?://\S+", "", text)
     text = re.sub(r"\s+", " ", text)
+    text = text.replace("'", "").replace('"', '').replace("\\", "")
+    # text = re.escape(text)
     return text
 
 
@@ -33,11 +36,11 @@ answers2 = stackoverflow_row_data.loc[~stackoverflow_row_data["abody"].isnull(),
 questions2 = stackoverflow_row_data.loc[~stackoverflow_row_data["qbody"].isnull(), "qbody"].apply(clean_text)
 print(answers2.tail())
 with open(input_dir + 'cleaned_data.csv', 'w') as csvfile:
-    fieldnames = ['question', 'answer']
+    fieldnames = ['title', 'paragraphs']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
     for rows in questions2.index:
-        writer.writerow({'question': questions2[rows], 'answer': answers2[rows]})
+        writer.writerow({'title': questions2[rows], 'paragraphs': "['" + answers2[rows] + "']"})
 
     for row in questions.index:
-        writer.writerow({'question': questions[row], 'answer': answers[row]})
+        writer.writerow({'title': questions[row], 'paragraphs': "['" + answers[row] + "']"})
